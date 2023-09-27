@@ -1,20 +1,22 @@
 // import { useRoute } from '@react-navigation/native'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { PostsScreen } from './PostsScreen'
 import { CreatePostsScreen } from './CreatePostsScreen'
 import { ProfileScreen } from './ProfileScreen'
 import { Ionicons, Feather } from '@expo/vector-icons'
 import { COLORS } from '../libs/colors'
+import { CommonActions } from '@react-navigation/native'
 
 const Tabs = createBottomTabNavigator()
 
-export const HomeScreen = () => {
+export const HomeScreen = ({ navigation }) => {
   // const { params } = useRoute()
 
   return (
     <Tabs.Navigator
       initialRouteName="Posts"
+      backBehavior="history"
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -34,13 +36,15 @@ export const HomeScreen = () => {
           headerTitle: 'Публікації',
           headerRight: () => (
             <TouchableOpacity style={styles.logOutBtn}>
-              <Feather name="log-out" size={24} color="#BDBDBD" />
+              <Feather name="log-out" size={24} color={COLORS.grayIcon} />
             </TouchableOpacity>
           ),
           tabBarIcon: ({ focused }) => (
             <View
               style={{
-                backgroundColor: focused ? '#FF6C00' : 'white',
+                backgroundColor: focused
+                  ? COLORS.navTabActiveBtn
+                  : COLORS.navTabInactiveBtn,
                 ...styles.navTab
               }}
             >
@@ -60,11 +64,12 @@ export const HomeScreen = () => {
         component={CreatePostsScreen}
         options={{
           headerTitle: 'Створити публікацію',
-
           tabBarIcon: ({ focused }) => (
             <View
               style={{
-                backgroundColor: focused ? '#FF6C00' : 'white',
+                backgroundColor: focused
+                  ? COLORS.navTabActiveBtn
+                  : COLORS.navTabInactiveBtn,
                 ...styles.navTab
               }}
             >
@@ -76,6 +81,16 @@ export const HomeScreen = () => {
                 }
               />
             </View>
+          ),
+          headerLeft: () => (
+            <TouchableOpacity
+              style={styles.goBackBtn}
+              onPress={() => {
+                navigation.goBack()
+              }}
+            >
+              <Feather name="arrow-left" size={24} color={COLORS.grayIcon} />
+            </TouchableOpacity>
           )
         }}
       />
@@ -87,7 +102,9 @@ export const HomeScreen = () => {
           tabBarIcon: ({ focused }) => (
             <View
               style={{
-                backgroundColor: focused ? '#FF6C00' : 'white',
+                backgroundColor: focused
+                  ? COLORS.navTabActiveBtn
+                  : COLORS.navTabInactiveBtn,
                 ...styles.navTab
               }}
             >
@@ -116,5 +133,8 @@ const styles = StyleSheet.create({
   },
   logOutBtn: {
     marginRight: 16
+  },
+  goBackBtn: {
+    marginLeft: 16
   }
 })

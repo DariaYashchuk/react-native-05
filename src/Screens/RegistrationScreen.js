@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 100,
     alignItems: 'center',
-    backgroundColor: COLORS.primaryBtn,
+    backgroundColor: COLORS.primaryBtnActive,
     marginBottom: 16
   },
   registerBtnText: {

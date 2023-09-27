@@ -13,12 +13,20 @@ export const COLORS = {
 
   link: '#1B4371',
 
-  primaryBtn: '#FF6C00',
+  primaryBtnActive: '#FF6C00',
+  primaryBtnDisabled: '#F6F6F6',
   whiteBtnText: '#fff',
+  whiteBtnTextDisabled: '#BDBDBD',
 
   errorColor: 'red',
   errorBg: '#fff',
 
+  grayText: '#BDBDBD',
+  grayIcon: '#BDBDBD',
+
   navTabActiveIcon: '#fff',
-  navTabInactiveIcon: '#212121CC'
+  navTabInactiveIcon: '#212121CC',
+
+  navTabActiveBtn: '#FF6C00',
+  navTabInactiveBtn: '#white'
 }

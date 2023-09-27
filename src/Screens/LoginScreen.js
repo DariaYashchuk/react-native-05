@@ -51,7 +51,7 @@ export const LoginScreen = () => {
   const onSubmit = (data) => {
     console.log(data)
     navigation.navigate('Home', {
-      // screen: 'PostsScreen',
+      screen: 'Posts',
       params: {
         email: data.email
       }
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 100,
     alignItems: 'center',
-    backgroundColor: COLORS.primaryBtn,
+    backgroundColor: COLORS.primaryBtnActive,
     marginBottom: 16
   },
   registerBtnText: {
