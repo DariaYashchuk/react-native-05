@@ -7,7 +7,6 @@ export const PreviewPhoto = ({ source }) => {
 const styles = StyleSheet.create({
   photoPreview: {
     width: '100%',
-    height: '100%',
-    position: 'absolute'
+    height: '100%'
   }
 })
