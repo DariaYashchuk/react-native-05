@@ -4,21 +4,28 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback
 } from 'react-native-gesture-handler'
-// import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons'
 import { COLORS } from '../libs/colors'
 import React, { useState, useEffect, useRef } from 'react'
 import { Camera } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
 import { TakePhoto } from '../Components/TakePhoto'
 import { PreviewPhoto } from '../Components/PreviewPhoto'
+import * as Location from 'expo-location'
+import { useNavigation } from '@react-navigation/native'
 
 export const CreatePostsScreen = () => {
+  const navigation = useNavigation()
+
   const [hasCameraPermission, setHasCameraPermission] = useState(null)
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] =
     useState(null)
-  const [photo, setPhoto] = useState(null)
+  const [photo, setPhoto] = useState('')
 
   const [isPublishBtnDisabled, setIsPublishBtnDisabled] = useState(true)
+
+  const [location, setLocation] = useState('')
+  const [name, setName] = useState('')
+  const [locationName, setLocationName] = useState('')
 
   useEffect(() => {
     ;(async () => {
@@ -28,6 +35,22 @@ export const CreatePostsScreen = () => {
 
       setHasCameraPermission(cameraPermission.status === 'granted')
       setHasMediaLibraryPermission(mediaLibraryPermission.status === 'granted')
+    })()
+  }, [])
+
+  useEffect(() => {
+    ;(async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync()
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied')
+      }
+
+      let location = await Location.getCurrentPositionAsync({})
+      const coords = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude
+      }
+      setLocation(coords)
     })()
   }, [])
 
@@ -48,18 +71,29 @@ export const CreatePostsScreen = () => {
     )
   }
 
-  const onChange = () => {
-    // console.log(e.currentTurget.value)
-    return
-  }
-
-  const onSubmit = () => {
-    return
-  }
-
   const updateData = (value) => {
     setPhoto(value)
   }
+
+  const reset = () => {
+    setPhoto('')
+    setName('')
+    setLocationName('')
+    setLocation('')
+  }
+
+  const onSubmit = () => {
+    const data = {
+      photo,
+      name,
+      locationName,
+      location: location || { latitude: 50.450001, longitude: 30.523333 }
+    }
+    console.log(data)
+    navigation.navigate('Posts')
+    reset()
+  }
+
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -91,7 +125,8 @@ export const CreatePostsScreen = () => {
           placeholder="Назва..."
           placeholderTextColor={COLORS.placeholderColor}
           name="name"
-          onChangeText={onChange}
+          onChangeText={(newText) => setName(newText)}
+          value={name}
         />
 
         <TextInput
@@ -99,35 +134,35 @@ export const CreatePostsScreen = () => {
           placeholder="Місцевість..."
           placeholderTextColor={COLORS.placeholderColor}
           name="location"
-          onChangeText={onChange}
+          onChangeText={(newText) => setLocationName(newText)}
+          value={locationName}
         />
       </TouchableWithoutFeedback>
       <TouchableOpacity
         style={{
           ...styles.publishBtn,
-          backgroundColor: isPublishBtnDisabled
-            ? COLORS.primaryBtnDisabled
-            : COLORS.primaryBtnActive
+          backgroundColor:
+            name === '' || locationName === '' || photo === ''
+              ? COLORS.primaryBtnDisabled
+              : COLORS.primaryBtnActive
         }}
         onPress={onSubmit}
-        disabled={isPublishBtnDisabled}
+        disabled={
+          name === '' || locationName === '' || photo === '' ? true : false
+        }
       >
         <Text
           style={{
             ...styles.publishBtnText,
-            color: isPublishBtnDisabled
-              ? COLORS.whiteBtnTextDisabled
-              : COLORS.whiteBtnText
+            color:
+              name === '' || locationName === '' || photo === ''
+                ? COLORS.whiteBtnTextDisabled
+                : COLORS.whiteBtnText
           }}
         >
           Опубліковати
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.goBack()
-        }}
-      ></TouchableOpacity>
     </View>
   )
 }

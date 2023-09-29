@@ -1,6 +1,7 @@
 export const COLORS = {
   whiteBg: '#fff',
   regularText: '#212121',
+  profileEmail: 'rgba(33, 33, 33, 0.80)',
   addAvatarBtn: '#FF6C00',
   uploadAvatar: '#F6F6F6',
   removeAvatarBtnCross: '#BDBDBD',
